@@ -29,8 +29,44 @@ public class DebugInfo : MonoBehaviour
             averageFps /= frameTimes.Count;
             count = 0;
         }
-        DebugText.text = $"\nCurrent FPS: {1f / Time.unscaledDeltaTime:F2}\nAverage FPS: {averageFps:F2}\nLowest FPS: {lowestFps:F2}";
+        DebugText.text = $"""
+        Current FPS: {1f / Time.unscaledDeltaTime:F2}
+        Average FPS: {averageFps:F2}
+        Lowest FPS: {lowestFps:F2}
 
+        Number of Weapons: {GameData.weapons.Count}
+        Weapon Names: {ListWeaponNames(GameData.weapons)}
+        """;
+
+    }
+    private string ListWeaponNames(List<Weapon> weapons)
+    {
+        // returns list of weapon names, condensing multiple instances of the same weapon into a single entry with a count
+        Dictionary<string, int> weaponCounts = new Dictionary<string, int>();
+        foreach (Weapon weapon in weapons)
+        {
+            if (weaponCounts.ContainsKey(weapon.name))
+            {
+                weaponCounts[weapon.name]++;
+            }
+            else
+            {
+                weaponCounts[weapon.name] = 1;
+            }
+        }
+        List<string> weaponNames = new List<string>();
+        foreach (KeyValuePair<string, int> entry in weaponCounts)
+        {
+            if (entry.Value > 1)
+            {
+                weaponNames.Add($"{entry.Key} x{entry.Value}");
+            }
+            else
+            {
+                weaponNames.Add(entry.Key);
+            }
+        }
+        return string.Join(", ", weaponNames);
     }
     private void AddFrame(float frame)
     {
