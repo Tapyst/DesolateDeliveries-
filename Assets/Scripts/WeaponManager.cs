@@ -7,7 +7,7 @@ public class WeaponManager : MonoBehaviour
     
     [SerializeField] public List<Weapon> weaponPrefabs = new List<Weapon>();
     private List<GameObject> weaponGameObjects = new List<GameObject>();
-    private int numberOfWeapons = 12;
+    private int numberOfWeapons = 1;
     public GameObject weaponPrefab;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,15 @@ public class WeaponManager : MonoBehaviour
             float angle = (360 / GameData.weapons.Count) * i;
             weaponGameObjects.Add(Instantiate(weaponPrefab, new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * 2, Mathf.Sin(Mathf.Deg2Rad * angle) * 2, 0), Quaternion.identity, transform));
             weaponGameObjects[i].GetComponent<SpriteRenderer>().sprite = weapon.sprite;
+            GameData.weapons[i].currentVelocity = Vector3.zero;
+        }
+    }
+    void Update()
+    {
+        for (int i = 0; i < GameData.weapons.Count; i++)
+        {
+            Weapon weapon = GameData.weapons[i];
+            weapon.timeSinceAttack += Time.deltaTime;
         }
     }
     private void AddWeapon(Weapon weapon)
@@ -37,7 +46,7 @@ public class WeaponManager : MonoBehaviour
         int randomIndex = Random.Range(0, weaponPrefabs.Count);
         return weaponPrefabs[randomIndex];
     }
-    private List<GameObject> GetWeaponObjects()
+    public List<GameObject> GetWeaponObjects()
     {
         return weaponGameObjects;
     }

@@ -52,27 +52,27 @@ public class CameraFollow : MonoBehaviour
         //only move if the player has moved further than the deadzone bounds
         Vector3 desiredPosition = transform.position;
 
-            if (isFollowing || Mathf.Abs(distance.x) > deadzoneSize.x || Mathf.Abs(distance.y) > deadzoneSize.y)
+        if (isFollowing || Mathf.Abs(distance.x) > deadzoneSize.x || Mathf.Abs(distance.y) > deadzoneSize.y)
+        {
+            isFollowing = true;
+            if (Mathf.Abs(distance.x) < 0.1f && Mathf.Abs(distance.y) < 0.1f)
             {
-                isFollowing = true;
-                if (Mathf.Abs(distance.x) < 0.1f && Mathf.Abs(distance.y) < 0.1f)
-                {
-                    isFollowing = false;
-                }
+                isFollowing = false;
             }
-        
-            if (!isFollowing) return;
-            //calculate how far outside the deadzone the player is
-            float xShift = distance.x/* - (Mathf.Sign(distance.x) * deadzoneSize.x)*/;
-            desiredPosition.x += xShift;
-            float yShift = distance.y/* - (Mathf.Sign(distance.y) * deadzoneSize.y)*/;
-            desiredPosition.y += yShift;
+        }
+    
+        if (!isFollowing) return;
+        //calculate how far outside the deadzone the player is
+        float xShift = distance.x/* - (Mathf.Sign(distance.x) * deadzoneSize.x)*/;
+        desiredPosition.x += xShift;
+        float yShift = distance.y/* - (Mathf.Sign(distance.y) * deadzoneSize.y)*/;
+        desiredPosition.y += yShift;
         //prevents jitter i hope
         transform.position = Vector3.SmoothDamp(
-            transform.position, 
-            desiredPosition, 
-            ref currentVelocity, 
-            smoothTime
+        transform.position, 
+        desiredPosition, 
+        ref currentVelocity, 
+        smoothTime
         );
     }
 }
