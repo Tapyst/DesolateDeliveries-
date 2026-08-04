@@ -6,8 +6,10 @@ public class WeaponManager : MonoBehaviour
 {
     
     [SerializeField] public List<Weapon> weaponPrefabs = new List<Weapon>();
-    private List<GameObject> weaponGameObjects = new List<GameObject>();
-    private int numberOfWeapons = 1;
+    public List<GameObject> weaponGameObjects = new List<GameObject>();
+    public List<WeaponHandler> weaponHandlers = new List<WeaponHandler>();
+    public int numberOfWeapons = 6;
+    private float weaponDistance = 1.5f;
     public GameObject weaponPrefab;
     // Start is called before the first frame update
     void Start()
@@ -19,10 +21,10 @@ public class WeaponManager : MonoBehaviour
         for (int i = 0; i < GameData.weapons.Count; i++)
         {
             Weapon weapon = GameData.weapons[i];
-            float angle = (360 / GameData.weapons.Count) * i;
-            weaponGameObjects.Add(Instantiate(weaponPrefab, new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * 2, Mathf.Sin(Mathf.Deg2Rad * angle) * 2, 0), Quaternion.identity, transform));
+            weaponGameObjects.Add(Instantiate(weaponPrefab, GetWeaponOrigin(i), Quaternion.identity, transform));
+            weaponHandlers.Add(weaponGameObjects[i].GetComponent<WeaponHandler>());
             weaponGameObjects[i].GetComponent<SpriteRenderer>().sprite = weapon.sprite;
-            GameData.weapons[i].currentVelocity = Vector3.zero;
+            weaponHandlers[i].currentVelocity = Vector3.zero;
         }
     }
     void Update()
@@ -30,7 +32,7 @@ public class WeaponManager : MonoBehaviour
         for (int i = 0; i < GameData.weapons.Count; i++)
         {
             Weapon weapon = GameData.weapons[i];
-            weapon.timeSinceAttack += Time.deltaTime;
+            weaponHandlers[i].timeSinceAttack += Time.deltaTime;
         }
     }
     private void AddWeapon(Weapon weapon)
@@ -40,6 +42,11 @@ public class WeaponManager : MonoBehaviour
     private void ResetWeaponLocations()
     {
         
+    }
+    public Vector3 GetWeaponOrigin(int index)
+    {
+        float angle = 360f / (float)GameData.weapons.Count * (float)index;
+        return new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * weaponDistance, Mathf.Sin(Mathf.Deg2Rad * angle) * weaponDistance, 0);
     }
     private Weapon RandomWeapon()
     {

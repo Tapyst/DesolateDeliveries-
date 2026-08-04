@@ -651,6 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2413d9b270ba0044e8786ccd55eb2060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPointing: 1
 --- !u!212 &692448061
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -800,6 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2413d9b270ba0044e8786ccd55eb2060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPointing: 1
 --- !u!1 &967826723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,6 +1240,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponPrefabs:
   - {fileID: 11400000, guid: dac1fefa5f3125745b874cbbda0742ad, type: 2}
+  weaponGameObjects: []
+  weaponHandlers: []
+  numberOfWeapons: 720
   weaponPrefab: {fileID: 1071916029672758150, guid: fd9d39180650b884aa8fb941d3e002c4, type: 3}
 --- !u!1 &1644314909
 GameObject:
@@ -1284,6 +1289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2413d9b270ba0044e8786ccd55eb2060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPointing: 1
 --- !u!212 &1644314912
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1497,6 +1503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2413d9b270ba0044e8786ccd55eb2060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPointing: 1
 --- !u!212 &2013423474
 SpriteRenderer:
   m_ObjectHideFlags: 0

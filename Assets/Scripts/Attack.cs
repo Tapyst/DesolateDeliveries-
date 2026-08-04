@@ -5,7 +5,8 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     [SerializeField] private WeaponManager weaponManager;
-    private float range = 4f;
+
+    public float range = 4f;
     private bool isAttacking = false;
     // Update is called once per frame
     void Update()
@@ -20,18 +21,19 @@ public class Attack : MonoBehaviour
     {
         // use mouse position to teleport weapons to mouse direction within range
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(0f, 0f, Camera.main.transform.position.z);
-        Vector3 direction = (mousePosition - transform.position).normalized;
-        for (int i = 0; i < weaponManager.weaponPrefabs.Count; i++)
+        
+        for (int i = 0; i < weaponManager.weaponGameObjects.Count; i++)
         {
-            if (GameData.weapons[i].timeSinceAttack > GameData.weapons[i].attackCooldown)
+            Vector3 direction = (mousePosition - weaponManager.weaponGameObjects[i].transform.position).normalized;
+            if (weaponManager.weaponHandlers[i].timeSinceAttack > GameData.weapons[i].attackCooldown)
             {
-                GameData.weapons[i].timeSinceAttack = 0f;
+                weaponManager.weaponHandlers[i].timeSinceAttack = 0f;
                 GameObject weaponObject = weaponManager.GetWeaponObjects()[i];
-                GameData.weapons[i].targetPosition = transform.position + direction * range;
+                weaponManager.weaponHandlers[i].targetPosition = weaponObject.transform.position + direction * range;
                 weaponObject.transform.position = Vector3.SmoothDamp(
                         weaponManager.GetWeaponObjects()[i].transform.position, 
-                        transform.position + direction * range, 
-                        ref GameData.weapons[i].currentVelocity, 
+                        weaponManager.weaponHandlers[i].targetPosition, 
+                        ref weaponManager.weaponHandlers[i].currentVelocity, 
                         GameData.weapons[i].attackCooldown / 4
                         );
 
@@ -48,41 +50,43 @@ public class Attack : MonoBehaviour
     }
     private void moveWeapons()
     {
-        for (int i = 0; i < weaponManager.weaponPrefabs.Count; i++)
+        for (int i = 0; i < weaponManager.weaponGameObjects.Count; i++)
         {
             GameObject weaponObject = weaponManager.GetWeaponObjects()[i];
-            if (GameData.weapons[i].currentVelocity.x == null || GameData.weapons[i].currentVelocity.y == null)
+            if (float.IsNaN(weaponManager.weaponHandlers[i].currentVelocity.x) || float.IsNaN(weaponManager.weaponHandlers[i].currentVelocity.y))
             {
-                GameData.weapons[i].currentVelocity = Vector3.zero;
+                Debug.Log("WE ARE ALL GONNA DIE");
+                weaponManager.weaponHandlers[i].currentVelocity = Vector3.zero;
             }
-            if (weaponObject.transform.position != GameData.weapons[i].targetPosition && GameData.weapons[i].timeSinceAttack < GameData.weapons[i].attackCooldown / 4)
+            if (weaponObject.transform.position != weaponManager.weaponHandlers[i].targetPosition && weaponManager.weaponHandlers[i].timeSinceAttack < GameData.weapons[i].attackCooldown / 4)
             {
                 
                 weaponObject.transform.position = Vector3.SmoothDamp(
                         weaponObject.transform.position, 
-                        GameData.weapons[i].targetPosition, 
-                        ref GameData.weapons[i].currentVelocity, 
+                        weaponManager.weaponHandlers[i].targetPosition, 
+                        ref weaponManager.weaponHandlers[i].currentVelocity, 
                         GameData.weapons[i].attackCooldown / 10
                         );
             }
-            if (GameData.weapons[i].timeSinceAttack >= GameData.weapons[i].attackCooldown / 4 && GameData.weapons[i].timeSinceAttack < GameData.weapons[i].attackCooldown / 2)
+            if (weaponManager.weaponHandlers[i].timeSinceAttack >= GameData.weapons[i].attackCooldown / 4 && weaponManager.weaponHandlers[i].timeSinceAttack < GameData.weapons[i].attackCooldown / 2)
             {
-                weaponObject.transform.position = GameData.weapons[i].targetPosition;
+                weaponObject.transform.position = weaponManager.weaponHandlers[i].targetPosition;
             }
-            if (weaponObject.transform.position != new Vector3(Mathf.Cos(Mathf.Deg2Rad * 360/i) * 2, Mathf.Sin(Mathf.Deg2Rad * 360/i) * 2, 0) && GameData.weapons[i].timeSinceAttack >= GameData.weapons[i].attackCooldown / 2 && GameData.weapons[i].timeSinceAttack < GameData.weapons[i].attackCooldown)
+            Vector3 originalPosition = weaponManager.GetWeaponOrigin(i) + transform.position;
+            if (weaponObject.transform.position != originalPosition && weaponManager.weaponHandlers[i].timeSinceAttack >= GameData.weapons[i].attackCooldown / 2 && weaponManager.weaponHandlers[i].timeSinceAttack < GameData.weapons[i].attackCooldown)
             {
                 
-                Debug.Log("weaponObject.transform.position: " + weaponObject.transform.position + " targetPosition: " + GameData.weapons[i].targetPosition + " currentVelocity: " + GameData.weapons[i].currentVelocity + " attackCooldown: " + GameData.weapons[i].attackCooldown);
+                //Debug.Log("weaponObject.transform.position: " + weaponObject.transform.position + " targetPosition: " + originalPosition + " currentVelocity: " + weaponManager.weaponHandlers[i].currentVelocity + " attackCooldown: " + GameData.weapons[i].attackCooldown);
                 weaponObject.transform.position = Vector3.SmoothDamp(
                         weaponObject.transform.position,
-                        new Vector3(Mathf.Cos(Mathf.Deg2Rad * 360/i) * 2, Mathf.Sin(Mathf.Deg2Rad * 360/i) * 2, 0),
-                        ref GameData.weapons[i].currentVelocity, 
-                        GameData.weapons[i].attackCooldown / 4
+                        originalPosition,
+                        ref weaponManager.weaponHandlers[i].currentVelocity, 
+                        GameData.weapons[i].attackCooldown / 8
                         );
             }
-            if (GameData.weapons[i].timeSinceAttack >= GameData.weapons[i].attackCooldown)
+            if (weaponManager.weaponHandlers[i].timeSinceAttack >= GameData.weapons[i].attackCooldown)
             {
-                //GameData.weapons[i].targetPosition = new Vector3(Mathf.Cos(Mathf.Deg2Rad * 360/i) * 2, Mathf.Sin(Mathf.Deg2Rad * 360/i) * 2, 0);
+                weaponManager.weaponHandlers[i].targetPosition = originalPosition;
                 WeaponPointer weaponPointer = weaponObject.GetComponent<WeaponPointer>();
                 if (weaponPointer != null)
                 {

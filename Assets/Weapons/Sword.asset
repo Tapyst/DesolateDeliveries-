@@ -18,6 +18,6 @@ MonoBehaviour:
   description: Sharp
   rarity: 0
   price: 3
-  timeSinceAttack: 1.8725984
-  currentVelocity: {x: 0.002629751, y: -0.0027933756, z: 0}
-  targetPosition: {x: 6.703317, y: -3.3887794, z: 0}
+  timeSinceAttack: 6.9706497
+  currentVelocity: {x: 33.672634, y: 7.6760745, z: 0}
+  targetPosition: {x: 2, y: 0, z: 0}
