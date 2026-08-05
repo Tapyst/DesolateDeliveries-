@@ -29,13 +29,13 @@ public class Attack : MonoBehaviour
             {
                 weaponManager.weaponHandlers[i].timeSinceAttack = 0f;
                 GameObject weaponObject = weaponManager.GetWeaponObjects()[i];
-                weaponManager.weaponHandlers[i].targetPosition = weaponObject.transform.position + direction * range;
+                weaponManager.weaponHandlers[i].targetPosition = (weaponObject.transform.position + direction * range - transform.position).normalized * range + transform.position;
                 weaponObject.transform.position = Vector3.SmoothDamp(
-                        weaponManager.GetWeaponObjects()[i].transform.position, 
-                        weaponManager.weaponHandlers[i].targetPosition, 
-                        ref weaponManager.weaponHandlers[i].currentVelocity, 
-                        GameData.weapons[i].attackCooldown / 4
-                        );
+                    weaponManager.GetWeaponObjects()[i].transform.position, 
+                    weaponManager.weaponHandlers[i].targetPosition, 
+                    ref weaponManager.weaponHandlers[i].currentVelocity, 
+                    GameData.weapons[i].attackCooldown / 4
+                    );
 
 
                 //get weaponpointer script from weaponObject and set isPointing to false
@@ -62,11 +62,11 @@ public class Attack : MonoBehaviour
             {
                 
                 weaponObject.transform.position = Vector3.SmoothDamp(
-                        weaponObject.transform.position, 
-                        weaponManager.weaponHandlers[i].targetPosition, 
-                        ref weaponManager.weaponHandlers[i].currentVelocity, 
-                        GameData.weapons[i].attackCooldown / 10
-                        );
+                    weaponObject.transform.position, 
+                    weaponManager.weaponHandlers[i].targetPosition, 
+                    ref weaponManager.weaponHandlers[i].currentVelocity, 
+                    GameData.weapons[i].attackCooldown / 10
+                    );
             }
             if (weaponManager.weaponHandlers[i].timeSinceAttack >= GameData.weapons[i].attackCooldown / 4 && weaponManager.weaponHandlers[i].timeSinceAttack < GameData.weapons[i].attackCooldown / 2)
             {
@@ -78,11 +78,11 @@ public class Attack : MonoBehaviour
                 
                 //Debug.Log("weaponObject.transform.position: " + weaponObject.transform.position + " targetPosition: " + originalPosition + " currentVelocity: " + weaponManager.weaponHandlers[i].currentVelocity + " attackCooldown: " + GameData.weapons[i].attackCooldown);
                 weaponObject.transform.position = Vector3.SmoothDamp(
-                        weaponObject.transform.position,
-                        originalPosition,
-                        ref weaponManager.weaponHandlers[i].currentVelocity, 
-                        GameData.weapons[i].attackCooldown / 8
-                        );
+                    weaponObject.transform.position,
+                    originalPosition,
+                    ref weaponManager.weaponHandlers[i].currentVelocity, 
+                    GameData.weapons[i].attackCooldown / 8
+                    );
             }
             if (weaponManager.weaponHandlers[i].timeSinceAttack >= GameData.weapons[i].attackCooldown)
             {

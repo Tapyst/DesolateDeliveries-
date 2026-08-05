@@ -1242,7 +1242,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dac1fefa5f3125745b874cbbda0742ad, type: 2}
   weaponGameObjects: []
   weaponHandlers: []
-  numberOfWeapons: 720
+  numberOfWeapons: 6
   weaponPrefab: {fileID: 1071916029672758150, guid: fd9d39180650b884aa8fb941d3e002c4, type: 3}
 --- !u!1 &1644314909
 GameObject:
