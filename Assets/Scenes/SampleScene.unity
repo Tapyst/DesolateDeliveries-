@@ -1240,6 +1240,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponPrefabs:
   - {fileID: 11400000, guid: dac1fefa5f3125745b874cbbda0742ad, type: 2}
+  - {fileID: 11400000, guid: 30407100f4a87fb45bbe42a52a011d84, type: 2}
+  - {fileID: 11400000, guid: c69e85595f4abdf41aaba339c9aeed63, type: 2}
+  - {fileID: 11400000, guid: 0bc40c684f4f2314990e34cfafadb50b, type: 2}
+  - {fileID: 11400000, guid: a87bd37a485cc7e438430f6301ab67c6, type: 2}
   weaponGameObjects: []
   weaponHandlers: []
   numberOfWeapons: 6
